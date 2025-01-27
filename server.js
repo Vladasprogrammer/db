@@ -15,13 +15,13 @@ const con = mysql.createConnection({
     database: 'miskas'
 });
 
-con.connect(err => {
-    if (err) {
-        console.log('Klaida prisijungiant prie DB');
-        return;
-    }
-    console.log('Prisijungimas prie DB buvo sėkmingas');
-});
+// con.connect(err => {
+//     if (err) {
+//         console.log('Klaida prisijungiant prie DB');
+//         return;
+//     }
+//     console.log('Prisijungimas prie DB buvo sėkmingas');
+// });
 
 app.get('/medziu-sarasas/:page', (req, res) => {
 
