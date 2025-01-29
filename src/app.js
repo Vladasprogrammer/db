@@ -90,7 +90,9 @@ const doSearch = _ => {
 
 const getTrees = (ap = 1, q = '') => {
     const qurl = q ? '?q=' + q : '';
-    axios.get(URL + 'medziu-sarasas/' + ap + qurl)
+    const fullUrl = URL + 'medziu-sarasas/' + ap + qurl;
+    
+    axios.get(fullUrl)
         .then(res => {
             console.log(res.data);
             renderTrees(res.data);

@@ -1,154 +1,6 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/app.js":
-/*!********************!*\
-  !*** ./src/app.js ***!
-  \********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
-
-var URL = 'http://localhost:3000/';
-var init = function init(_) {
-  getTrees();
-  doSearch();
-  var createForm = document.querySelector('[data-form-create]');
-  var deleteForm = document.querySelector('[data-form-delete]');
-  var editForm = document.querySelector('[data-form-edit]');
-  createForm.querySelector('button').addEventListener('click', function (_) {
-    var inputs = createForm.querySelectorAll('[name]');
-    var data = {};
-    inputs.forEach(function (input) {
-      data[input.getAttribute('name')] = input.value;
-      input.value = '';
-    });
-    axios__WEBPACK_IMPORTED_MODULE_0__["default"].post(URL + 'sodinti-medi', data).then(function (res) {
-      console.log(res.data);
-      getTrees();
-    })["catch"](function (error) {
-      console.log('Klaida siunčiant duomenis į DB');
-    });
-  });
-  deleteForm.querySelector('button').addEventListener('click', function (_) {
-    var id = deleteForm.querySelector('[name="id"]').value;
-    deleteForm.querySelector('[name="id"]').value = '';
-    axios__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](URL + 'iskasti-medi/' + id).then(function (res) {
-      console.log(res.data);
-      getTrees();
-    })["catch"](function (error) {
-      console.log('Klaida trinant duomenis iš DB');
-    });
-  });
-  editForm.querySelector('button').addEventListener('click', function (_) {
-    var inputs = editForm.querySelectorAll('[name]');
-    var data = {};
-    inputs.forEach(function (input) {
-      data[input.getAttribute('name')] = input.value;
-      input.value = '';
-    });
-    var id = data.id;
-    delete data.id;
-    axios__WEBPACK_IMPORTED_MODULE_0__["default"].put(URL + 'persodinti-medi/' + id, data).then(function (res) {
-      console.log(res.data);
-      getTrees();
-    })["catch"](function (error) {
-      console.log('Klaida siunčiant duomenis į DB');
-    });
-  });
-};
-var doSearch = function doSearch(_) {
-  var searchField = document.querySelector('[data-search]');
-  searchField.addEventListener('input', function (_) {
-    var q = searchField.value;
-    if (q.length < 2) {
-      getTrees(1);
-      return;
-    }
-    getTrees(1, q);
-  });
-};
-var getTrees = function getTrees() {
-  var ap = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-  var q = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-  var qurl = q ? '?q=' + q : '';
-  var fullUrl = URL + 'medziu-sarasas/' + ap + qurl;
-  axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(fullUrl).then(function (res) {
-    console.log(res.data);
-    renderTrees(res.data);
-    getPaginator(ap, q);
-  })["catch"](function (error) {
-    console.log('Klaida gaunant duomenis iš DB');
-  });
-};
-var renderTrees = function renderTrees(trees) {
-  var listTemplate = document.querySelector('template[data-list]');
-  var listUL = document.querySelector('ul[data-list]');
-  listUL.innerHTML = '';
-  trees.forEach(function (tree) {
-    var li = document.importNode(listTemplate.content, true);
-    li.querySelector('[data-list-id]').innerText = tree.id + '.';
-    li.querySelector('[data-list-name]').innerText = tree.name;
-    li.querySelector('[data-list-height]').innerText = tree.height.toFixed(2) + ' m';
-    li.querySelector('[data-list-type]').innerText = tree.type;
-    listUL.appendChild(li);
-  });
-};
-var getPaginator = function getPaginator(ap) {
-  var q = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-  var qurl = q ? '?q=' + q : '';
-  axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(URL + 'medziu-skaicius' + qurl).then(function (res) {
-    console.log(res.data);
-    renderPaginator(res.data.pages, ap, q);
-  })["catch"](function (error) {
-    console.log('Klaida gaunant duomenis iš DB');
-  });
-};
-var renderPaginator = function renderPaginator(pages, activPage, q) {
-  var paginator = document.querySelector('div[data-paginator]');
-  paginator.innerHTML = '';
-  var span;
-  span = document.createElement('span');
-  span.innerText = 'Atgal';
-  if (activPage !== 1) {
-    span.classList.add('active');
-    span.addEventListener('click', function (_) {
-      getTrees(activPage - 1, q);
-    });
-  }
-  paginator.appendChild(span);
-  var _loop = function _loop(i) {
-    var span = document.createElement('span');
-    span.innerText = i;
-    if (i !== activPage) {
-      span.classList.add('active');
-      span.addEventListener('click', function (_) {
-        getTrees(i, q);
-      });
-    } else {
-      span.classList.add('current');
-    }
-    paginator.appendChild(span);
-  };
-  for (var i = 1; i <= pages; i++) {
-    _loop(i);
-  }
-  span = document.createElement('span');
-  span.innerText = 'Pirmyn';
-  if (activPage !== pages) {
-    span.classList.add('active');
-    span.addEventListener('click', function (_) {
-      getTrees(activPage + 1, q);
-    });
-  }
-  paginator.appendChild(span);
-};
-init();
-
-/***/ }),
-
 /***/ "./node_modules/base64-js/index.js":
 /*!*****************************************!*\
   !*** ./node_modules/base64-js/index.js ***!
@@ -2216,19 +2068,6 @@ var toString = {}.toString;
 module.exports = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
-
-
-/***/ }),
-
-/***/ "./src/style.scss":
-/*!************************!*\
-  !*** ./src/style.scss ***!
-  \************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
 
 
 /***/ }),
@@ -7209,42 +7048,7 @@ const asap = typeof queueMicrotask !== 'undefined' ?
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = __webpack_modules__;
-/******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/chunk loaded */
-/******/ 	(() => {
-/******/ 		var deferred = [];
-/******/ 		__webpack_require__.O = (result, chunkIds, fn, priority) => {
-/******/ 			if(chunkIds) {
-/******/ 				priority = priority || 0;
-/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
-/******/ 				deferred[i] = [chunkIds, fn, priority];
-/******/ 				return;
-/******/ 			}
-/******/ 			var notFulfilled = Infinity;
-/******/ 			for (var i = 0; i < deferred.length; i++) {
-/******/ 				var [chunkIds, fn, priority] = deferred[i];
-/******/ 				var fulfilled = true;
-/******/ 				for (var j = 0; j < chunkIds.length; j++) {
-/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every((key) => (__webpack_require__.O[key](chunkIds[j])))) {
-/******/ 						chunkIds.splice(j--, 1);
-/******/ 					} else {
-/******/ 						fulfilled = false;
-/******/ 						if(priority < notFulfilled) notFulfilled = priority;
-/******/ 					}
-/******/ 				}
-/******/ 				if(fulfilled) {
-/******/ 					deferred.splice(i--, 1)
-/******/ 					var r = fn();
-/******/ 					if (r !== undefined) result = r;
-/******/ 				}
-/******/ 			}
-/******/ 			return result;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -7285,68 +7089,76 @@ const asap = typeof queueMicrotask !== 'undefined' ?
 /******/ 		};
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/jsonp chunk loading */
-/******/ 	(() => {
-/******/ 		// no baseURI
-/******/ 		
-/******/ 		// object to store loaded and loading chunks
-/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
-/******/ 		var installedChunks = {
-/******/ 			"/public/app": 0,
-/******/ 			"public/style": 0
-/******/ 		};
-/******/ 		
-/******/ 		// no chunk on demand loading
-/******/ 		
-/******/ 		// no prefetching
-/******/ 		
-/******/ 		// no preloaded
-/******/ 		
-/******/ 		// no HMR
-/******/ 		
-/******/ 		// no HMR manifest
-/******/ 		
-/******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
-/******/ 		
-/******/ 		// install a JSONP callback for chunk loading
-/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
-/******/ 			var [chunkIds, moreModules, runtime] = data;
-/******/ 			// add "moreModules" to the modules object,
-/******/ 			// then flag all "chunkIds" as loaded and fire callback
-/******/ 			var moduleId, chunkId, i = 0;
-/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
-/******/ 				for(moduleId in moreModules) {
-/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
-/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
-/******/ 					}
-/******/ 				}
-/******/ 				if(runtime) var result = runtime(__webpack_require__);
-/******/ 			}
-/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
-/******/ 			for(;i < chunkIds.length; i++) {
-/******/ 				chunkId = chunkIds[i];
-/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
-/******/ 					installedChunks[chunkId][0]();
-/******/ 				}
-/******/ 				installedChunks[chunkId] = 0;
-/******/ 			}
-/******/ 			return __webpack_require__.O(result);
-/******/ 		}
-/******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunkdb"] = self["webpackChunkdb"] || [];
-/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
-/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
-/******/ 	})();
-/******/ 	
 /************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["public/style"], () => (__webpack_require__("./src/app.js")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["public/style"], () => (__webpack_require__("./src/style.scss")))
-/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
-/******/ 	
+var __webpack_exports__ = {};
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
+(() => {
+"use strict";
+/*!*********************!*\
+  !*** ./src/app2.js ***!
+  \*********************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+
+var URL = 'http://localhost:3000/';
+var init = function init(_) {
+  getClients('inner');
+  getClients('left');
+  getClients('right');
+  getClients('left', true);
+};
+var getClients = function getClients(t) {
+  var nice = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(URL + 'klientai/' + t).then(function (res) {
+    console.log(res.data);
+    renderClients(res.data, t, nice);
+  })["catch"](function (error) {
+    console.log('Klaida gaunant duomenis iš DB');
+  });
+};
+var renderClients = function renderClients(clients, list, nice) {
+  if (nice) {
+    list = 'nice';
+    var niceClients = [];
+    clients.forEach(function (client) {
+      if (!niceClients.find(function (c) {
+        return c.id === client.id;
+      })) {
+        niceClients.push(client);
+      } else {
+        var nc = niceClients.find(function (c) {
+          return c.id === client.id;
+        });
+        nc.number += ', ' + client.number;
+      }
+    });
+    clients = niceClients;
+  }
+  var lists = {
+    inner: document.querySelector('ul[data-list-inner]'),
+    left: document.querySelector('ul[data-list-left]'),
+    right: document.querySelector('ul[data-list-right]'),
+    nice: document.querySelector('ul[data-list-left-nice]')
+  };
+  var listTemplate = document.querySelector('template[data-list]');
+  var listUL = lists[list];
+  listUL.innerHTML = '';
+  var liTop = "\n        <span data-list-cid class=\"id\">cid</span>\n        <span data-list-name class=\"name\">name</span>\n\n        <span data-list-pid class=\"id\">pid</span>\n        <span data-list-number class=\"number\">number</span>\n        <span data-list-cpid class=\"id\">c_id</span>\n    ";
+  var liTopEl = document.createElement('li');
+  liTopEl.innerHTML = liTop;
+  listUL.appendChild(liTopEl);
+  clients.forEach(function (client) {
+    var li = document.importNode(listTemplate.content, true);
+    li.querySelector('[data-list-cid]').innerText = client.id + '.';
+    li.querySelector('[data-list-name]').innerText = client.name;
+    li.querySelector('[data-list-pid]').innerText = client.pid + '.';
+    li.querySelector('[data-list-number]').innerText = client.number;
+    li.querySelector('[data-list-cpid]').innerText = client.client_id + '.';
+    listUL.appendChild(li);
+  });
+};
+init();
+})();
+
 /******/ })()
 ;
